@@ -6,6 +6,7 @@ public class RocketScript : MonoBehaviour
 {
     private InputMaster inputMaster;
     private Transform rocketMesh;
+    private Renderer rocketRender;
     private float animSpeed = 100f;
 
     private Vector2 rocketDir;
@@ -17,6 +18,7 @@ public class RocketScript : MonoBehaviour
     void Awake()
     {
         rocketMesh = transform.GetChild(0);
+        rocketRender = transform.GetChild(0).GetComponent<Renderer>();
         rocketBody = GetComponent<Rigidbody>();
         SetUpInputs();
     }
@@ -49,9 +51,18 @@ public class RocketScript : MonoBehaviour
         RocketRotation(rocketDir.x);
     }
 
+
     void FixedUpdate()
     {
         RocketMove(rocketDir);
+    }
+
+    void LateUpdate()
+    {
+        if (!rocketRender.isVisible)
+        {
+            Debug.Log("Kill Rocket");
+        }
     }
 
     void RocketAnimation()

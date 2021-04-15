@@ -13,17 +13,24 @@ public class ObstaclesManager : MonoBehaviour
     private List<GameObject> meteoritesPool = new List<GameObject>();
     public Transform meteoritesPoolObject;
 
+    [Header("Obstacles")]
+    public GameObject[] obstacles; //Rock paths, Vertical Lasers, Horizontal Lasers, Stars
+
     // Start is called before the first frame update
     void Start()
     {
         CreateMeteoritesPool();
-        InvokeRepeating("SpawnMeteorite", 0f, 1f);
+        InvokeRepeating("SpawnMeteorite", 1f, 1f);
+        InvokeRepeating("ActivateObstacle", 5f, 10f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        EdgesMovementLoop();
+        if(!GameController.instance.gameOver)
+        {
+            EdgesMovementLoop();
+        }
     }
 
     void LateUpdate()
@@ -90,6 +97,30 @@ public class ObstaclesManager : MonoBehaviour
                 meteoritesPool[i].SetActive(false);
             }
         }
+    }
+    #endregion
+
+    #region Obstacles
+    void ActivateObstacle()
+    {
+        CancelInvoke("SpawnMeteorite");
+        int obstacleIndex = Random.Range(0, 4);
+        obstacles[obstacleIndex].SetActive(true);
+    }
+
+    public void ObstacleJustEnded()
+    {
+        if(!GameController.instance.gameOver)
+        {
+            InvokeRepeating("SpawnMeteorite", 0f, 1f);
+            InstructionsManager.instance.DeactivateInstruction();
+        }
+    }
+
+    public void CancelObstacles()
+    {
+        CancelInvoke("SpawnMeteorite");
+        CancelInvoke("ActivateObstacle");
     }
     #endregion
 }

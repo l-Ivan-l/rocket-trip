@@ -15,6 +15,9 @@ public class RocketScript : MonoBehaviour
 
     private float steeringAngle = 20f;
 
+    private bool dead;
+    public ParticleSystem explosionVFX;
+
     void Awake()
     {
         rocketMesh = transform.GetChild(0);
@@ -81,5 +84,32 @@ public class RocketScript : MonoBehaviour
         float angle = Mathf.LerpAngle(newRot.z, steeringAngle * -_direction, Time.deltaTime * 10f);
         newRot.z = angle;
         transform.eulerAngles = newRot;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Kill Rocket");
+        if(!dead)
+        {
+            KillRocket();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Laser") && !dead)
+        {
+            KillRocket();
+        }
+    }
+
+    void KillRocket()
+    {
+        Time.timeScale = 1f;
+        explosionVFX.transform.position = this.transform.position;
+        explosionVFX.Play();
+        dead = true;
+        GameController.instance.GameOver();
+        gameObject.SetActive(false);
     }
 }

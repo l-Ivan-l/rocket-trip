@@ -7,6 +7,10 @@ TagManager:
   - Rocket
   - Laser
   - Obstacle
+  - Yellow
+  - Blue
+  - Green
+  - Orange
   layers:
   - Default
   - TransparentFX

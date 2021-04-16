@@ -16,18 +16,19 @@ public class ObstaclesManager : MonoBehaviour
     [Header("Obstacles")]
     public GameObject[] obstacles; //Rock paths, Vertical Lasers, Horizontal Lasers, Stars
 
+    private float meteoritesRate = 1f;
+    private float minMeteoritesRate = 0.5f;
+
     // Start is called before the first frame update
     void Start()
     {
         CreateMeteoritesPool();
-        InvokeRepeating("SpawnMeteorite", 1f, 1f);
-        InvokeRepeating("ActivateObstacle", 5f, 10f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!GameController.instance.gameOver)
+        if(!GameController.instance.gameOver && GameController.instance.gameStarted)
         {
             EdgesMovementLoop();
         }
@@ -36,6 +37,12 @@ public class ObstaclesManager : MonoBehaviour
     void LateUpdate()
     {
         ControlMeteorites();
+    }
+
+    public void StartObstacles()
+    {
+        InvokeRepeating("SpawnMeteorite", 1f, meteoritesRate);
+        InvokeRepeating("ActivateObstacle", 5f, 8f);
     }
 
     void EdgesMovementLoop()
@@ -112,7 +119,25 @@ public class ObstaclesManager : MonoBehaviour
     {
         if(!GameController.instance.gameOver)
         {
-            InvokeRepeating("SpawnMeteorite", 0f, 1f);
+            GameController.instance.Score += 1;
+            if(meteoritesRate > minMeteoritesRate)
+            {
+                meteoritesRate -= 0.05f;
+            }
+            InvokeRepeating("SpawnMeteorite", 0f, meteoritesRate);
+            InstructionsManager.instance.DeactivateInstruction();
+        }
+    }
+
+    public void StarObstacleEndedWithoutScore()
+    {
+        if (!GameController.instance.gameOver)
+        {
+            if (meteoritesRate > minMeteoritesRate)
+            {
+                meteoritesRate -= 0.05f;
+            }
+            InvokeRepeating("SpawnMeteorite", 0f, meteoritesRate);
             InstructionsManager.instance.DeactivateInstruction();
         }
     }

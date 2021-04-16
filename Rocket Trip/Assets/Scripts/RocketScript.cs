@@ -17,12 +17,16 @@ public class RocketScript : MonoBehaviour
 
     private bool dead;
     public ParticleSystem explosionVFX;
+    public ParticleSystem starVFX;
+
+    private Animator rocketAnim;
 
     void Awake()
     {
         rocketMesh = transform.GetChild(0);
         rocketRender = transform.GetChild(0).GetComponent<Renderer>();
         rocketBody = GetComponent<Rigidbody>();
+        rocketAnim = GetComponent<Animator>();
         SetUpInputs();
     }
     // Start is called before the first frame update
@@ -50,8 +54,11 @@ public class RocketScript : MonoBehaviour
     void Update()
     {
         RocketAnimation();
-        rocketDir = inputMaster.RocketActions.Move.ReadValue<Vector2>();
-        RocketRotation(rocketDir.x);
+        if(GameController.instance.gameStarted)
+        {
+            rocketDir = inputMaster.RocketActions.Move.ReadValue<Vector2>();
+            RocketRotation(rocketDir.x);
+        }
     }
 
 
@@ -62,9 +69,9 @@ public class RocketScript : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!rocketRender.isVisible)
+        if (!rocketRender.isVisible && GameController.instance.gameStarted && !rocketAnim.enabled && !dead)
         {
-            Debug.Log("Kill Rocket");
+            KillRocket();
         }
     }
 
@@ -88,7 +95,6 @@ public class RocketScript : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Kill Rocket");
         if(!dead)
         {
             KillRocket();
@@ -101,6 +107,17 @@ public class RocketScript : MonoBehaviour
         {
             KillRocket();
         }
+
+        if(other.CompareTag("Yellow") || other.CompareTag("Blue") || other.CompareTag("Green") || other.CompareTag("Orange"))
+        {
+            starVFX.transform.position = other.transform.position;
+            starVFX.Play();
+            other.gameObject.SetActive(false);
+            if(other.gameObject.tag != GameController.instance.currentSafeStar && !dead)
+            {
+                KillRocket();
+            } 
+        }
     }
 
     void KillRocket()
@@ -111,5 +128,10 @@ public class RocketScript : MonoBehaviour
         dead = true;
         GameController.instance.GameOver();
         gameObject.SetActive(false);
+    }
+
+    public void DeactivateRocketAnimator()
+    {
+        rocketAnim.enabled = false;
     }
 }

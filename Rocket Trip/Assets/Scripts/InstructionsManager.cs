@@ -14,6 +14,8 @@ public class InstructionsManager : MonoBehaviour
     private string[] verticalVariation = { "Left", "Middle", "Right" };
     private string[] horizontalVariation = { "Top", "Middle", "Bottom" };
 
+    public GameObject postProcessingObject;
+
     private void Awake()
     {
         if (instance == null)
@@ -39,6 +41,7 @@ public class InstructionsManager : MonoBehaviour
 
     public void ActivateInstruction(int _obstacle, int _variation, string _color)
     {
+        postProcessingObject.SetActive(true);
         Time.timeScale = 0.5f;
         switch(_obstacle)
         {
@@ -69,6 +72,7 @@ public class InstructionsManager : MonoBehaviour
         }
         yield return new WaitForSecondsRealtime(1f);
         Time.timeScale = 1f;
+        postProcessingObject.SetActive(false);
     }
 
     public void DeactivateInstruction()

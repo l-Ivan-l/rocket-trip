@@ -25,6 +25,7 @@ public class StarsScript : MonoBehaviour
             stars[i].SetActive(true);
         }
         Debug.Log("Safe star: " + safeStar);
+        GameController.instance.currentSafeStar = safeStar;
     }
 
     private void Awake()
@@ -81,13 +82,30 @@ public class StarsScript : MonoBehaviour
         }
     }
 
+    bool CheckIfRocketGrabbedStar()
+    {
+        int nStars = 0;
+        for (int i = 0; i < stars.Length; i++)
+        {
+            if(stars[i].activeInHierarchy)
+            {
+                nStars++;
+            }
+        }
+
+        return nStars < 4;
+    }
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Rocket"))
+        if (other.gameObject.CompareTag("Rocket") && CheckIfRocketGrabbedStar())
         {
             //Add score
             Debug.Log("Stars passed");
             GameController.instance.obstacles.ObstacleJustEnded();
+        } else
+        {
+            GameController.instance.obstacles.StarObstacleEndedWithoutScore();
         }
     }
 }

@@ -39,8 +39,6 @@ public class LasersScript : MonoBehaviour
     IEnumerator DeactivateLasers()
     {
         yield return new WaitForSeconds(1f);
-        //Add score if Rocket survived
-
         GameController.instance.obstacles.ObstacleJustEnded();
         for (int i = 0; i < lasers.Length; i++)
         {

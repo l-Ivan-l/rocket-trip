@@ -27,6 +27,7 @@ public class LasersScript : MonoBehaviour
         Debug.Log(_laserIndex);
         yield return new WaitForSecondsRealtime(1.5f);
         Debug.Log("Activate lasers");
+        SoundManager.instance.PlayLaserSound(0.8f);
         for (int i = 0; i < lasers.Length; i++)
         {
             lasers[i].SetActive(true);

@@ -120,6 +120,7 @@ public class ObstaclesManager : MonoBehaviour
         if(!GameController.instance.gameOver)
         {
             GameController.instance.Score += 1;
+            SoundManager.instance.PlayScoreSound(0.6f);
             if(meteoritesRate > minMeteoritesRate)
             {
                 meteoritesRate -= 0.05f;

@@ -75,6 +75,7 @@ public class GameController : MonoBehaviour
         gameOver = true;
         obstacles.CancelObstacles();
         gameOverPanel.SetActive(true);
+        SoundManager.instance.PlayGameOverSound(0.8f);
     }
 
     public void ReturnToMenu()

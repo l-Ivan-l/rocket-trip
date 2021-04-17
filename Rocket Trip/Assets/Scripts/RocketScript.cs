@@ -20,6 +20,7 @@ public class RocketScript : MonoBehaviour
     public ParticleSystem starVFX;
 
     private Animator rocketAnim;
+    private AudioSource rocketAudio;
 
     void Awake()
     {
@@ -27,6 +28,7 @@ public class RocketScript : MonoBehaviour
         rocketRender = transform.GetChild(0).GetComponent<Renderer>();
         rocketBody = GetComponent<Rigidbody>();
         rocketAnim = GetComponent<Animator>();
+        rocketAudio = GetComponent<AudioSource>();
         SetUpInputs();
     }
     // Start is called before the first frame update
@@ -116,7 +118,10 @@ public class RocketScript : MonoBehaviour
             if(other.gameObject.tag != GameController.instance.currentSafeStar && !dead)
             {
                 KillRocket();
-            } 
+            } else
+            {
+                SoundManager.instance.PlayGrabStarSound(1f);
+            }
         }
     }
 
@@ -125,6 +130,7 @@ public class RocketScript : MonoBehaviour
         Time.timeScale = 1f;
         explosionVFX.transform.position = this.transform.position;
         explosionVFX.Play();
+        SoundManager.instance.PlayExplosionSound(1f);
         dead = true;
         GameController.instance.GameOver();
         gameObject.SetActive(false);

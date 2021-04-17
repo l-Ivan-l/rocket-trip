@@ -41,6 +41,7 @@ public class InstructionsManager : MonoBehaviour
 
     public void ActivateInstruction(int _obstacle, int _variation, string _color)
     {
+        SoundManager.instance.PlayInstructionSound(1f);
         postProcessingObject.SetActive(true);
         Time.timeScale = 0.5f;
         switch(_obstacle)

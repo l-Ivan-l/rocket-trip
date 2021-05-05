@@ -15,6 +15,7 @@ public class InstructionsManager : MonoBehaviour
     private string[] horizontalVariation = { "Top", "Middle", "Bottom" };
 
     public GameObject postProcessingObject;
+    private AudioSource music;
 
     private void Awake()
     {
@@ -30,19 +31,16 @@ public class InstructionsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        music = GetComponent<AudioSource>();
         textDisplay.text = ". . .";
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void ActivateInstruction(int _obstacle, int _variation, string _color)
     {
         SoundManager.instance.PlayInstructionSound(1f);
         postProcessingObject.SetActive(true);
+        music.pitch = 0.75f;
+        music.volume = 0.5f;
         Time.timeScale = 0.5f;
         switch(_obstacle)
         {
@@ -73,6 +71,8 @@ public class InstructionsManager : MonoBehaviour
         }
         yield return new WaitForSecondsRealtime(1f);
         Time.timeScale = 1f;
+        music.pitch = 1f;
+        music.volume = 0.75f;
         postProcessingObject.SetActive(false);
     }
 

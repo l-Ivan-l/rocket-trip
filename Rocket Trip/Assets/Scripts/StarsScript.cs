@@ -10,9 +10,11 @@ public class StarsScript : MonoBehaviour
     public float starsSpeed = 5f;
     public float rotSpeed = 6f;
     private List<Vector3> starsPositions = new List<Vector3>();
+    private Collider obstacleTrigger;
 
     private void OnEnable()
     {
+        obstacleTrigger.enabled = true;
         int starIndex = Random.Range(0, 4); //0 = Yellow, 1 = Blue, 2 = Green, 3 = Orange
         safeStar = stars[starIndex].tag;
         InstructionsManager.instance.ActivateInstruction(4, 0, safeStar); 
@@ -34,6 +36,7 @@ public class StarsScript : MonoBehaviour
         {
             starsPositions.Add(stars[i].transform.localPosition);
         }
+        obstacleTrigger = GetComponent<Collider>();
     }
 
     // Update is called once per frame
@@ -103,9 +106,11 @@ public class StarsScript : MonoBehaviour
             //Add score
             Debug.Log("Stars passed");
             GameController.instance.obstacles.ObstacleJustEnded();
+            obstacleTrigger.enabled = false;
         } else
         {
             GameController.instance.obstacles.StarObstacleEndedWithoutScore();
+            obstacleTrigger.enabled = false;
         }
     }
 }

@@ -7,9 +7,16 @@ public class RocksPathScript : MonoBehaviour
     [SerializeField]
     private GameObject[] blockers;
     public float rocksSpeed = 5f;
+    private Collider obstacleTrigger;
+
+    private void Awake()
+    {
+        obstacleTrigger = GetComponent<Collider>();
+    }
 
     private void OnEnable()
     {
+        obstacleTrigger.enabled = true;
         int blockerIndex = Random.Range(0, 3); //0 = Left, 1 = Middle, 2 = Right
         InstructionsManager.instance.ActivateInstruction(1, blockerIndex, null);
         for(int i = 0; i < blockers.Length; i++)
@@ -49,6 +56,7 @@ public class RocksPathScript : MonoBehaviour
             //Add score
             Debug.Log("Rocks passed");
             GameController.instance.obstacles.ObstacleJustEnded();
+            obstacleTrigger.enabled = false;
         }
     }
 }

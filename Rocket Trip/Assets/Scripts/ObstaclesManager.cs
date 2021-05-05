@@ -49,17 +49,24 @@ public class ObstaclesManager : MonoBehaviour
     {
         for(int i = 0; i < edges.Length; i++)
         {
+            //Rellocate at position 10
+            if (edges[i].position.y <= -10f)
+            {
+                Vector3 rellocatePos = edges[i].position;
+                if (i == edges.Length - 1)
+                {
+                    rellocatePos.y = edges[0].position.y + 10f;
+                }
+                else
+                {
+                    rellocatePos.y = edges[i + 1].position.y + 10f;
+                }
+                edges[i].position = rellocatePos;
+            }
+
             Vector3 newPos = edges[i].position;
             newPos.y -= worldSpeed * Time.deltaTime;
             edges[i].position = newPos;
-
-            //Rellocate at position 10
-            if(edges[i].position.y <= -10f)
-            {
-                Vector3 rellocatePos = edges[i].position;
-                rellocatePos.y = 10f;
-                edges[i].position = rellocatePos;
-            }
         }
     }
 

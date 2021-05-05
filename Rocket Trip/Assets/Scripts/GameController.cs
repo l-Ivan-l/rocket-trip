@@ -23,6 +23,8 @@ public class GameController : MonoBehaviour
     public Text scoreText;
     public GameObject scoreUI;
 
+    private AudioSource music;
+
     public int Score
     {
         get { return score; }
@@ -48,13 +50,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        music = GetComponent<AudioSource>();
     }
 
     public void StartGame()
@@ -69,6 +65,8 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
+        music.volume = 0.4f;
+        music.pitch = 0.65f;
         scoreText.text = "Your Score: " + score.ToString();
         instructionsPanel.GetComponent<Animator>().SetTrigger("InstructionsOut");
         scoreUI.GetComponent<Animator>().SetTrigger("ScoreOut");
